@@ -1,0 +1,7 @@
+name: GraphQL Compose Extend
+type: module
+description: 'Extend the schema of GraphQL Compose.'
+core_version_requirement: ^9 || ^10
+package: Custom
+dependencies:
+  - graphql_compose:graphql_compose

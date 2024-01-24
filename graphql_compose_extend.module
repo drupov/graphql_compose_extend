@@ -1,0 +1,42 @@
+<?php
+
+use Drupal\graphql_compose\Plugin\GraphQLComposeSchemaTypeManager;
+use GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\ObjectType;
+
+/**
+ * Add custom types to the schema.
+ *
+ * @param Drupal\graphql_compose\Plugin\GraphQLComposeSchemaTypeManager $manager
+ *   The GraphQL Compose Schema Type Manager.
+ *
+ * @throws \Exception
+ */
+function graphql_compose_extend_graphql_compose_print_types(GraphQLComposeSchemaTypeManager $manager): void {
+  $custom_type = new ObjectType([
+    'name' => 'Custom',
+    'fields' => [
+      'currentDateAndTime' => Type::string(),
+    ],
+  ]);
+  $manager->add($custom_type);
+}
+
+/**
+ * Add extensions to the schema.
+ *
+ * @param Drupal\graphql_compose\Plugin\GraphQLComposeSchemaTypeManager $manager
+ *   The GraphQL Compose Schema Type Manager.
+ */
+function graphql_compose_extend_graphql_compose_print_extensions(GraphQLComposeSchemaTypeManager $manager): void {
+  $custom_extension = new ObjectType([
+    'name' => 'Query',
+    'fields' => fn() => [
+      'custom' => [
+        'type' => $manager->get('Custom'),
+        'description' => (string) t('Custom type.'),
+      ],
+    ],
+  ]);
+  $manager->extend($custom_extension);
+}
